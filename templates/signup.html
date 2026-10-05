@@ -1,0 +1,36 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Sign up</h2>
+            <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" name="first_name" placeholder="First Name" class="form-control mb-2" required>
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" name="last_name" placeholder="Last Name" class="form-control mb-2" required>
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" placeholder="Username" class="form-control mb-2" required>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" placeholder="Email" class="form-control mb-2" required>
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" placeholder="Password" class="form-control mb-2" required>
+                <div class="mb-2">
+                    <label for="profile_pic" class="form-label">Profile Picture</label>
+                    <input
+                        type="file"
+                        name="profile_pic"
+                        id="profile_pic"
+                        class="form-control"
+                        accept="image/*"
+                    >
+                </div>
+                <button type="submit" class="btn btn-primary">Sign up</button>
+            </form>
+            {% if msg %}
+                <p class="msg">{{msg}}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}  

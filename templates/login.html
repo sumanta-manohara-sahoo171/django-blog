@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Login</h2>
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" class="form-control mb-2" required>
+                <input type="password" name="password" placeholder="Password" class="form-control mb-2" required>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            {% if msg %}
+                <p class="msg">{{msg}}</p>
+            {% endif %}
+            <div class="signup-btn">
+                <div><p>Don't have an account? <a href="{% url 'signup' %}" class="normal-btn" >Sign up</a></p></div>
+                <a href="{% url 'forgot' %}">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'index.html' %}
+
+{% block title %}
+    Create Post - My Blog
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h1 class="mb-4">Create New Post</h1>
+
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <!-- Title -->
+                        <div class="mb-3">
+
+                            <label for="title" class="form-label">
+                                Title
+                            </label>
+
+                            <input
+                                type="text"
+                                name="title"
+                                id="title"
+                                class="form-control"
+                                placeholder="Enter post title"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Content -->
+                        <div class="mb-3">
+
+                            <label for="content" class="form-label">
+                                Content
+                            </label>
+
+                            <textarea
+                                name="content"
+                                id="content"
+                                class="form-control"
+                                rows="8"
+                                placeholder="Write your blog..."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- Image -->
+                        <div class="mb-3">
+
+                            <label for="image" class="form-label">
+                                Blog Image
+                            </label>
+
+                            <input
+                                type="file"
+                                name="image"
+                                id="image"
+                                class="form-control"
+                                accept="image/*"
+                            >
+
+                        </div>
+
+
+                        <!-- Published -->
+                        <div class="form-check mb-4">
+
+                            <input
+                                type="checkbox"
+                                name="is_published"
+                                id="is_published"
+                                class="form-check-input"
+                            >
+
+                            <label
+                                for="is_published"
+                                class="form-check-label"
+                            >
+                                Publish this post
+                            </label>
+
+                        </div>
+
+
+                        <!-- Submit -->
+                        <button
+                            type="submit"
+                            class="btn btn-success"
+                        >
+                            Create Post
+                        </button>
+                        <a
+                            href="{% url 'posts' %}"
+                            class="btn btn-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

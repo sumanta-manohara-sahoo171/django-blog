@@ -1,0 +1,350 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+    {{ post.title }} - My Blog
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <!-- =========================
+             BLOG IMAGE
+        ========================== -->
+
+        {% if post.image %}
+
+            <img
+                src="{{ post.image.url }}"
+                class="card-img-top"
+                alt="{{ post.title }}"
+                style="max-height: 450px; object-fit: cover;"
+            >
+
+        {% endif %}
+
+
+        <div class="card-body">
+
+            <!-- =========================
+                 TITLE
+            ========================== -->
+
+            <h1 class="card-title">
+                {{ post.title }}
+            </h1>
+
+
+            <!-- =========================
+                 AUTHOR / DATE
+            ========================== -->
+
+            <p class="text-muted">
+
+                <strong>Author:</strong>
+                {{ post.author.username }}
+
+                <br>
+
+                <strong>Published:</strong>
+                {{ post.created_at|date:"F j, Y" }}
+
+            </p>
+
+
+            <hr>
+
+
+            <!-- =========================
+                 POST CONTENT
+            ========================== -->
+
+            <div class="mb-4">
+
+                {{ post.content|linebreaks }}
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- =========================
+                 LIKE / DISLIKE
+            ========================== -->
+
+            <div class="d-flex align-items-center gap-2 mb-4">
+
+
+                <!-- LIKE -->
+
+                <form
+                    method="POST"
+                    action="{% url 'react_to_post' post.id 'like' %}"
+                    class="m-0"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn
+                        {% if user_reaction and user_reaction.reaction == 'like' %}
+                            btn-success
+                        {% else %}
+                            btn-outline-success
+                        {% endif %}"
+                    >
+
+                        <img
+                            src="{% static 'icons/like.svg' %}"
+                            alt=""
+                            class="post-action-icon"
+                        >
+
+                        Like&nbsp;{{ like_count }}
+
+                    </button>
+
+                </form>
+
+
+                <!-- DISLIKE -->
+
+                <form
+                    method="POST"
+                    action="{% url 'react_to_post' post.id 'dislike' %}"
+                    class="m-0"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn
+                        {% if user_reaction and user_reaction.reaction == 'dislike' %}
+                            btn-danger
+                        {% else %}
+                            btn-outline-danger
+                        {% endif %}"
+                    >
+
+                        <img
+                            src="{% static 'icons/dislike.svg' %}"
+                            alt=""
+                            class="post-action-icon"
+                        >
+
+                        Dislike&nbsp;{{ dislike_count }}
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- =========================
+                 COMMENTS HEADING
+            ========================== -->
+
+            <hr>
+
+            <h3 class="mb-4 d-flex align-items-center gap-2">
+
+                <img
+                    src="{% static 'icons/comment.svg' %}"
+                    alt=""
+                    class="comment-icon"
+                >
+
+                <span>
+                    Comments ({{ comments|length }})
+                </span>
+
+            </h3>
+
+
+            <!-- =========================
+                 ADD COMMENT
+            ========================== -->
+
+            <form
+                method="POST"
+                action="{% url 'add_comment' post.id %}"
+                class="mb-4"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="mb-3">
+
+                    <label
+                        for="comment"
+                        class="form-label"
+                    >
+                        Write a comment
+                    </label>
+
+
+                    <textarea
+                        name="content"
+                        id="comment"
+                        class="form-control"
+                        rows="4"
+                        placeholder="Write your comment..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-info"
+                >
+                    Add Comment
+                </button>
+
+            </form>
+
+
+            <!-- =========================
+                 COMMENT LIST
+            ========================== -->
+
+            {% for comment in comments %}
+
+                <div class="card mb-3">
+
+                    <div class="card-body">
+
+
+                        <!-- COMMENT HEADER -->
+
+                        <div class="d-flex justify-content-between">
+
+                            <div>
+
+                                <strong>
+                                    {{ comment.user.username }}
+                                </strong>
+
+                                <small class="text-muted ms-2">
+                                    {{ comment.created_at|date:"M j, Y H:i" }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <hr>
+
+
+                        <!-- COMMENT CONTENT -->
+
+                        <p class="mb-0">
+                            {{ comment.content|linebreaks }}
+                        </p>
+
+
+                        <!-- COMMENT ACTIONS -->
+
+                        {% if comment.user == user %}
+
+                            <div class="mt-3">
+
+                                <a
+                                    href="{% url 'edit_comment' comment.id %}"
+                                    class="btn btn-sm btn-outline-success"
+                                >
+                                    Edit
+                                </a>
+
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'delete_comment' comment.id %}"
+                                    style="display: inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this comment?');"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            {% empty %}
+
+                <div class="alert alert-info">
+
+                    No comments yet.
+                    Be the first to comment!
+
+                </div>
+
+            {% endfor %}
+
+
+            <!-- =========================
+                 NAVIGATION
+            ========================== -->
+
+            <hr>
+
+
+            <a
+                href="{% url 'posts' %}"
+                class="btn btn-secondary"
+            >
+                ← Back to Posts
+            </a>
+
+
+            {% if post.author == user %}
+
+                <a
+                    href="{% url 'update_post' post.id %}"
+                    class="btn btn-success"
+                >
+                    Edit Post
+                </a>
+
+
+                <a
+                    href="{% url 'delete_post' post.id %}"
+                    class="btn btn-danger"
+                    onclick="return confirm('Are you sure you want to delete this post?');"
+                >
+                    Delete Post
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+
+{% block title %}
+    Edit Comment - My Blog
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h2 class="mb-4">
+                        Edit Comment
+                    </h2>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+
+                            <label
+                                for="content"
+                                class="form-label"
+                            >
+                                Comment
+                            </label>
+
+                            <textarea
+                                name="content"
+                                id="content"
+                                class="form-control"
+                                rows="5"
+                                required
+                            >{{ comment.content }}</textarea>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-info"
+                        >
+                            Save Changes
+                        </button>
+
+                        <a
+                            href="{% url 'post-detail' comment.post.id %}"
+                            class="btn btn-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

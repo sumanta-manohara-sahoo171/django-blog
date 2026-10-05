@@ -1,0 +1,106 @@
+{% extends 'index.html' %}
+
+{% block title %}
+    Update Post - My Blog
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-8">
+
+        <h1 class="mb-4">
+            Update Blog Post
+        </h1>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="mb-3">
+
+                <label
+                    for="title"
+                    class="form-label">
+
+                    Title
+
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    value="{{ post.title }}"
+                    maxlength="100"
+                    required>
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label
+                    for="content"
+                    class="form-label">
+
+                    Content
+
+                </label>
+
+                <textarea
+                    class="form-control"
+                    id="content"
+                    name="content"
+                    rows="8"
+                    required>{{ post.content }}</textarea>
+
+            </div>
+
+
+            <div class="form-check mb-3">
+
+                <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="is_published"
+                    name="is_published"
+                    {% if post.is_published %}checked{% endif %}>
+
+                <label
+                    class="form-check-label"
+                    for="is_published">
+
+                    Publish this post
+
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-success">
+
+                Update Post
+
+            </button>
+
+            <a
+                href="{% url 'post-detail' post.id %}"
+                class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
